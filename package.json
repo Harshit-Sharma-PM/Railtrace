@@ -1,0 +1,7 @@
+{
+  "name": "railtrace-mvp-static",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Zero-dependency static payment exception triage prototype",
+  "scripts": {"test:syntax": "node --check app.js"}
+}
