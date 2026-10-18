@@ -26,7 +26,50 @@ The normal payment path is designed to complete transactions. Exceptions create 
 - **Secondary:** Refund-operations analysts and operations managers responsible for case queues, ageing and escalation.
 - **Potential buyers:** Finance or operations leaders, subject to discovery and willingness-to-pay validation.
 
-## 2. Initial use cases
+## 2. Public evidence and validation (desk research)
+
+This section adds externally observable signals to the problem framing. It is **secondary research**, not merchant interviews, a representative survey, or proof that RailTrace itself is needed. Sources establish the scale and operational mechanics of payment flows; they do not quantify merchant time lost to exception investigation.
+
+### Signal A — Merchant payment flows operate at very large scale
+
+NPCI's UPI ecosystem statistics report that in August 2025, UPI processed approximately **20.0 billion transactions** overall, including approximately **12.7 billion person-to-merchant (P2M) transactions**. The scale means even a small share of transactions requiring follow-up could create a meaningful absolute workload—but this is a sizing hypothesis, not a measured exception rate.
+
+Source: [NPCI — UPI Ecosystem Statistics](https://www.npci.org.in/what-we-do/upi/upi-ecosystem-statistics) (August 2025 table).
+
+### Signal B — Payment status outcomes vary across participants
+
+NPCI's August 2025 remitter-member table reports different approved and technical/business-decline rates across banks. For example, the published table shows SBI remitter approved at 93.66% and HDFC Bank at 95.37%; the same page also distinguishes technical declines, business declines and debit reversals. These are ecosystem-level measures, not merchant checkout conversion rates and not all declines are operational exceptions. They nevertheless show why status, participant and reversal context matter when diagnosing a payment outcome.
+
+Source: [NPCI — UPI Ecosystem Statistics](https://www.npci.org.in/what-we-do/upi/upi-ecosystem-statistics) (remitter-member performance, August 2025).
+
+### Signal C — Reconciliation requires linking transaction and settlement records
+
+Razorpay's documentation describes settlement reports that map transactions to settlement IDs and documents APIs that expose settlement IDs, transaction/payment sources, statuses, fees and amounts. Its published product material also describes a single-view reconciliation workflow across payment gateways, including settlement information such as UTR, settlement ID and aggregator. This validates that transaction-to-settlement matching and consolidated visibility are recognized product workflows in the market. It does **not** prove that every merchant lacks these capabilities or that a new standalone product would outperform existing tools.
+
+Sources:
+- [Razorpay — Settlement reports and reconciliation](https://razorpay.com/blog/how-to-use-razorpay-dashboard/)
+- [Razorpay — Single-view reconciliation across payment gateways](https://razorpay.com/blog/single-view-recon/)
+- [Razorpay Docs — Fetch transfers for a settlement](https://razorpay.com/docs/api/payments/route/fetch-transfers-for-a-settlement/?preferred-country=IN)
+
+### What this evidence does—and does not—validate
+
+| Claim | Evidence status | Interpretation |
+|---|---|---|
+| India has a very large merchant-payment flow | Supported by NPCI aggregate transaction data | Establishes scale, not the size of the exception-management market |
+| Payment outcomes and reversals require status context | Supported by NPCI participant-level statistics | Supports evidence-aware triage, but does not establish the cause of any individual transaction |
+| Transaction-to-settlement mapping and consolidated reconciliation are real workflows | Supported by payment-provider documentation and product materials | Confirms adjacent capabilities already exist; competitive differentiation must be demonstrated |
+| Merchants routinely switch between tools and lose significant time | **Not validated by the sources reviewed** | Keep as a hypothesis until credible merchant research or a reliable study quantifies it |
+| RailTrace reduces investigation time, losses or unresolved cases | **Not measured** | Do not claim business impact until a controlled usability test or pilot measures it |
+
+### Revised problem statement
+
+For merchants processing payments across one or more providers, payment and settlement evidence can be spread across transaction views, settlement reports and internal order/accounting records. When records do not match or statuses are unclear, the analyst needs to reconcile identifiers and amounts, determine what is known versus missing, and track a next action. Provider documentation confirms these records and reconciliation workflows exist; public sources reviewed here do not establish how painful this is for a particular merchant segment. RailTrace therefore targets a **testable workflow hypothesis**, not a proven market gap.
+
+### Competitive implication
+
+Razorpay and other payment providers already offer settlement details and reconciliation features. RailTrace should **not** position itself as a replacement for those dashboards or claim that the market lacks reconciliation. A more defensible potential wedge to test is an **exception-first, cross-provider investigation queue** that combines evidence from multiple systems, explains mismatches, records ownership and makes follow-up auditable. Whether that wedge is differentiated enough—and whether target merchants would adopt or pay for it—remains unvalidated.
+
+## 3. Initial use cases
 
 1. **Settlement mismatch:** order/payment evidence exists, but the expected and reported settlement amounts differ.
 2. **Payment confirmation missing:** an order appears paid or pending while confirmation evidence is incomplete or delayed.
@@ -36,7 +79,7 @@ The normal payment path is designed to complete transactions. Exceptions create 
 
 These categories are illustrative. Real terminology, frequency and handling differ by gateway, payment method, merchant stack and provider contract.
 
-## 3. Product goal and non-goals
+## 4. Product goal and non-goals
 
 ### Goal
 
@@ -50,7 +93,7 @@ Help an analyst reach a defensible next action for a payment exception, with the
 - Claiming live access to UPI, NPCI, card networks, banks or payment providers
 - Automatically resolving exceptions without verification
 
-## 4. Proposed workflow
+## 5. Proposed workflow
 
 1. **Surface:** show a searchable queue with status, exception type, priority, merchant/order reference and age.
 2. **Inspect:** bring available order, transaction, refund and settlement fields into one evidence view.
@@ -61,7 +104,7 @@ Help an analyst reach a defensible next action for a payment exception, with the
 
 The current prototype explores the queue, synthetic cases, evidence review, transparent rule-based recommendations, ownership/status, activity history, CSV import/export and browser-local persistence. These are prototype capabilities, not evidence of production readiness.
 
-## 5. Decision principles
+## 6. Decision principles
 
 - **Evidence before recommendation:** distinguish observed fields from assumptions and missing information.
 - **Explain uncertainty:** use a needs-review state when evidence is incomplete or contradictory; do not present a guess as a confirmed root cause.
@@ -69,7 +112,7 @@ The current prototype explores the queue, synthetic cases, evidence review, tran
 - **Auditable handoffs:** retain status changes, notes, owner and resolution rationale.
 - **Safe data handling:** use synthetic data in the portfolio demo and avoid storing real payment credentials or customer-sensitive records.
 
-## 6. MVP boundaries and trade-offs
+## 7. MVP boundaries and trade-offs
 
 | Decision | Rationale | Trade-off / risk |
 |---|---|---|
@@ -79,7 +122,7 @@ The current prototype explores the queue, synthetic cases, evidence review, tran
 | CSV import/export | Allows a basic workflow without integrations | Data mapping, duplicate detection and file quality need testing |
 | Case tracking, not money movement | Keeps the scope narrow and safer | Analysts still need the source system to verify evidence and execute actions |
 
-## 7. Success metrics to validate
+## 8. Success metrics to validate
 
 Do not report improvements until a baseline and a test have been run with representative users.
 
@@ -94,7 +137,7 @@ Do not report improvements until a baseline and a test have been run with repres
 
 Ask 5–8 payment/finance operators (a discovery sample, not a statistically representative study) to work through matched scripted scenarios using their current process and the prototype. Capture baseline and prototype task times, correct next actions, missed evidence and user confidence. Record the sample size, scenario mix and limitations. Treat results as directional.
 
-## 8. Discovery plan: what must be proven
+## 9. Discovery plan: what must be proven
 
 Before expanding the build, interview payment-operations and finance analysts at growing omnichannel merchants. Ask them to walk through the last real exception they handled, with sensitive details removed.
 
@@ -110,7 +153,7 @@ Questions:
 
 **Disconfirming evidence to look for:** existing tools already provide a trusted consolidated queue; exception volume is too low; analysts have no access to required data; integration/security costs exceed the value; or the main bottleneck is provider resolution time rather than investigation.
 
-## 9. Risks and mitigations
+## 10. Risks and mitigations
 
 - **False diagnosis:** display evidence and rule rationale, label missing/contradictory fields, require human confirmation.
 - **Provider-specific semantics:** validate statuses, settlement cycles and fee treatment with each provider before encoding rules.
@@ -119,7 +162,7 @@ Questions:
 - **Unclear ownership:** require an owner or explicit unassigned state and record handoffs.
 - **Overstated impact:** publish only measured results with method, sample size and baseline.
 
-## 10. Current prototype vs. next milestones
+## 11. Current prototype vs. next milestones
 
 ### Built in the prototype
 
