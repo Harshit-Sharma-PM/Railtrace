@@ -16,7 +16,7 @@ This problem statement is a hypothesis for discovery and validation, not a claim
 
 ## Product case study
 
-Read the detailed [RailTrace merchant payment exception triage case study](CASE_STUDY.md) for the problem hypothesis, target users, proposed workflow, product decisions, success metrics, discovery plan and open validation risks.
+Read the detailed [RailTrace merchant payment exception triage case study](CASE_STUDY.md) for the problem hypothesis, target users, proposed workflow, product decisions, success metrics, discovery plan and open validation risks. The [reproducible validation protocol](VALIDATION_PROTOCOL.md) and [seven synthetic test scenarios](validation/railtrace-scenarios.csv) document expected safe behavior; results are marked not run until actually executed.
 
 ## Product scope
 
