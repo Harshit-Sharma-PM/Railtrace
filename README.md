@@ -14,6 +14,10 @@ RailTrace explores a focused workflow: surface an exception, review its evidence
 
 This problem statement is a hypothesis for discovery and validation, not a claim that the prototype has demonstrated measurable operational savings.
 
+## Product case study
+
+Read the detailed [RailTrace merchant payment exception triage case study](CASE_STUDY.md) for the problem hypothesis, target users, proposed workflow, product decisions, success metrics, discovery plan and open validation risks.
+
 ## Product scope
 
 - Exception queue with search and filters
